@@ -14,6 +14,8 @@ public class IncomeDto {
 
     private Integer fromCardID;
 
+    private Integer toCardID;
+
     private Double amount;
 
     private Date date;

@@ -44,7 +44,8 @@ public class OutcomeService {
 
     public HttpEntity<?> addOutcome(OutcomeDto outcomeDto) {
         Optional<Card> byId = cardRepository.findById(outcomeDto.getToCardId());
-        if (!byId.isPresent()) {
+        Optional<Card> byId1 = cardRepository.findById(outcomeDto.getFromCardID());
+        if (!byId.isPresent() || !byId1.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         Outcome outcome = new Outcome();
@@ -52,14 +53,16 @@ public class OutcomeService {
         outcome.setDate(outcomeDto.getDate());
         outcome.setComissionAmount(outcomeDto.getComissionAmount());
         outcome.setToCard(byId.get());
+        outcome.setFromCard(byId1.get());
         return ResponseEntity.status(200).body("addad");
     }
 
 
     public HttpEntity<?> editOutcome(Integer id, OutcomeDto outcomeDto) {
         Optional<Card> byId = cardRepository.findById(outcomeDto.getToCardId());
+        Optional<Card> byId2 = cardRepository.findById(outcomeDto.getFromCardID());
         Optional<Outcome> byId1 = outcomeRepository.findById(id);
-        if (!byId.isPresent() || !byId1.isPresent()) {
+        if (!byId.isPresent() || !byId1.isPresent() || !byId2.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         Outcome outcome = byId1.get();
@@ -67,6 +70,7 @@ public class OutcomeService {
         outcome.setDate(outcomeDto.getDate());
         outcome.setComissionAmount(outcomeDto.getComissionAmount());
         outcome.setToCard(byId.get());
+        outcome.setFromCard(byId2.get());
         return ResponseEntity.status(200).body("edited");
     }
 

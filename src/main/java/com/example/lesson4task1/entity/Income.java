@@ -17,6 +17,9 @@ public class Income {
     private Integer id;
 
     @ManyToOne
+    private Card toCard;
+
+    @ManyToOne
     private Card fromCard;
 
     private Double amount;

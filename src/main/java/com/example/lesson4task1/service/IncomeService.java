@@ -1,12 +1,9 @@
 package com.example.lesson4task1.service;
 
-import com.example.lesson4task1.entity.Card;
 import com.example.lesson4task1.entity.Income;
-import com.example.lesson4task1.payload.CardDto;
 import com.example.lesson4task1.payload.IncomeDto;
 import com.example.lesson4task1.repository.CardRepository;
 import com.example.lesson4task1.repository.IncomeRepository;
-import com.example.lesson4task1.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -43,12 +40,14 @@ public class IncomeService {
 
     public HttpEntity<?> addIncome(IncomeDto incomeDto) {
         boolean b = cardRepository.existsById(incomeDto.getFromCardID());
-        if (!b) {
+        boolean b1 = cardRepository.existsById(incomeDto.getToCardID());
+        if (!b || !b1) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         Income income = new Income();
         income.setAmount(incomeDto.getAmount());
         income.setFromCard(cardRepository.getById(incomeDto.getFromCardID()));
+        income.setToCard(cardRepository.getById(incomeDto.getToCardID()));
         income.setDate(incomeDto.getDate());
         incomeRepository.save(income);
         return ResponseEntity.status(200).body("addad");
@@ -57,13 +56,15 @@ public class IncomeService {
 
     public HttpEntity<?> editIncome(Integer id, IncomeDto incomeDto) {
         boolean b = cardRepository.existsById(incomeDto.getFromCardID());
+        boolean b1 = cardRepository.existsById(incomeDto.getToCardID());
         Optional<Income> byId = incomeRepository.findById(id);
-        if (!b || !byId.isPresent()) {
+        if (!b || !byId.isPresent() || !b1) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         Income income = incomeRepository.getById(id);
         income.setAmount(incomeDto.getAmount());
         income.setFromCard(cardRepository.getById(incomeDto.getFromCardID()));
+        income.setToCard(cardRepository.getById(incomeDto.getToCardID()));
         income.setDate(incomeDto.getDate());
         incomeRepository.save(income);
         return ResponseEntity.status(200).body("edited");

@@ -13,6 +13,8 @@ import java.util.Date;
 public class OutcomeDto {
     private Integer toCardId;
 
+    private Integer fromCardID;
+
     private Double amount;
 
     private Date date;

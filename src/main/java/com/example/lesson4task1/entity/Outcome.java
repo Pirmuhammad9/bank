@@ -19,6 +19,9 @@ public class Outcome {
     @ManyToOne
     private Card toCard;
 
+    @ManyToOne
+    private Card fromCard;
+
     private Double amount;
 
     private Date date;
